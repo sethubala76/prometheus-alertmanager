@@ -1,0 +1,10 @@
+docker run -it -d -p 3000:3000 --name grafana grafana/grafana
+
+docker run -it -d --name alertmanager -p 9093:9093 -v /docker/alertmanager:/etc/alertmanager prom/alertmanager:v0.14.0 --config.file=alertmanager.yml
+
+sudo docker run -it -d --name prometheus -p 9090:9090 -v /docker/prometheus:/etc/prometheus --link alertmanager prom/prometheus:v1.6.3 --config.file=/etc/prometheus/prometheus.yml
+
+docker run -it -d -p 9100:9100 --name node-exporter prom/node-exporter
+
+
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' node-exporter
